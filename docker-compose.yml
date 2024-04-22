@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      args:
+        user: huy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: docker-setup
+    container_name: docker-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - docker-setup
+  db:
+    image: mysql:5.7
+    container_name: docker-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/sql:/docker-entrypoint-initdb.d
+    networks:
+      - docker-setup
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - docker-setup
+  nginx:
+    image: nginx:alpine
+    container_name: docker-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - docker-setup
+networks:
+  docker-setup:
+    driver: bridge
