@@ -13,9 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin/index');
-});
-
 Route::get('/uploads', 'App\Http\Controllers\Controller@testUpload');
 Route::post('/uploads', 'App\Http\Controllers\Controller@upload')->name('post_uploads');
+
+Route::prefix('admin')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::get('login', 'App\Http\Controllers\Admin\AuthController@getLogin')->name('admin.getLogin');
+        Route::post('login', 'App\Http\Controllers\Admin\AuthController@postLogin')->name('admin.postLogin');
+        Route::get('logout', 'App\Http\Controllers\Admin\AuthController@getLogout')->name('admin.getLogout');
+        Route::get('register', 'App\Http\Controllers\Admin\AuthController@getRegister')->name('admin.getRegister');
+
+    });
+
+    Route::middleware(['admin.auth'])->group(function () {
+        Route::get('dashboard', 'App\Http\Controllers\Admin\DashboardController@getDashboard')->name('admin.dashboard');
+        Route::get('/', function () {
+            return view('admin/index');
+        });
+        Route::prefix('category', function () {
+            Route::get('/', 'App\Http\Controllers\Admin\CategoryController@index')->name('category.index');
+        });
+    });
+});
