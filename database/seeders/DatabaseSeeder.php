@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('123456789'),
             'date_of_birth' => Carbon::now()->format('Y-m-d H:i:s'),
             'gender' => 1,

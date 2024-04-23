@@ -30,8 +30,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/', function () {
             return view('admin/index');
         });
-        Route::prefix('category', function () {
+        Route::prefix('category')->group(function () {
             Route::get('/', 'App\Http\Controllers\Admin\CategoryController@index')->name('category.index');
+            Route::get('/create', 'App\Http\Controllers\Admin\CategoryController@create')->name('category.create');
         });
     });
 });

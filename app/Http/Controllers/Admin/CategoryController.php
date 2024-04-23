@@ -18,12 +18,17 @@ class CategoryController extends Controller
         return view('admin.category.index', compact('categories'));
     }
 
+    public function getCategories(Request $request): array
+    {
+        return response()->json(['success' => true]);                
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
