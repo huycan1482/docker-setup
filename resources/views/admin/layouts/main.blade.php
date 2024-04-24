@@ -30,8 +30,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-
-    <link rel="stylesheet" href="{{ asset('asset/css/main.css') }}">
+    <link rel="stylesheet" href="{{ mix('asset/css/admin/main.css') }}">
     @stack('styles')
 </head>
 
@@ -68,7 +67,15 @@
 
     <!-- AdminLTE App -->
     <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+    {{-- axios --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {{-- sweetalert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     @stack('scripts')
+
+
 </body>
 
 </html>

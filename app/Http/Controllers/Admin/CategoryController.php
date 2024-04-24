@@ -4,17 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Repository\CategoryRepository;
+use App\Service\ImageBBService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
+    private $categoryRepository;
+    private $imageBBService;
+
+    public function __construct(CategoryRepository $categoryRepository, ImageBBService $imageBBService)
+    {
+        $this->categoryRepository = $categoryRepository;
+        $this->imageBBService = $imageBBService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $categories = Category::paginate(20);
+        $categories = $this->categoryRepository->paginate([], [], [], 10);
         return view('admin.category.index', compact('categories'));
     }
 
@@ -28,7 +39,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create');
+        $categories = $this->categoryRepository->get(['parent_id' => 0], ['id' => 'desc']);
+        return view('admin.category.create', compact('categories'));
     }
 
     /**
@@ -36,7 +48,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $category = new Category;
+        // $category->name = $request->name;
+        // $category = Category::create($data);
+
+        dd($request->all());
+
+        $data = $request->only('name', 'parent_id', 'image', 'active');
+        $data['slug'] = str_slug($data['name']);
+        // $encode = base64_encode(file_get_contents($request->file('image')));
+        // $res = $this->imageBBService->sendImage($encode);
+        // dd($res);
+
+        $category = $this->categoryRepository->create($data);
     }
 
     /**
