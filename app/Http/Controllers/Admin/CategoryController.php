@@ -25,6 +25,23 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
+        $newStr = '';
+        $str = -12301;
+        $str = str_replace(' ', '', (string)$str);
+        $arr = array_count_values(str_split($str));
+        
+        foreach ($arr as $key => $value) {
+            if ($value === 1) {
+                $newStr .= $key;
+            }
+        }
+
+        if ($newStr != '') {
+            dd($newStr);
+        } else {
+            dd(-1);
+        }
+
         $categories = $this->categoryRepository->paginate([], [], [], 10);
         return view('admin.category.index', compact('categories'));
     }
