@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Repository\CategoryRepository;
+use App\Service\DropBoxService;
 use App\Service\ImageBBService;
+use Dcblogdev\Dropbox\Dropbox as DropboxDropbox;
+use Dcblogdev\Dropbox\Facades\Dropbox;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,11 +16,13 @@ class CategoryController extends Controller
 {
     private $categoryRepository;
     private $imageBBService;
+    private $dropBoxService;
 
-    public function __construct(CategoryRepository $categoryRepository, ImageBBService $imageBBService)
+    public function __construct(CategoryRepository $categoryRepository, ImageBBService $imageBBService, DropBoxService $dropBoxService)
     {
         $this->categoryRepository = $categoryRepository;
         $this->imageBBService = $imageBBService;
+        $this->dropBoxService = $dropBoxService;
     }
 
     /**
@@ -25,22 +30,27 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
-        $newStr = '';
-        $str = -12301;
-        $str = str_replace(' ', '', (string)$str);
-        $arr = array_count_values(str_split($str));
         
-        foreach ($arr as $key => $value) {
-            if ($value === 1) {
-                $newStr .= $key;
-            }
-        }
+        dd($this->dropBoxService->getTemporaryLink('/288351110_3379051689046871_7684480373727570648_n.jpg'));
+        // dd(url('filemanager'.'/288351110_3379051689046871_7684480373727570648_n.jpg'));
+        dd(Dropbox::files()->listContents(), Dropbox::files()->search('288351110_3379051689046871_7684480373727570648_n.jpg'));
+        
+        // $newStr = '';
+        // $str = -12301;
+        // $str = str_replace(' ', '', (string)$str);
+        // $arr = array_count_values(str_split($str));
+        
+        // foreach ($arr as $key => $value) {
+        //     if ($value === 1) {
+        //         $newStr .= $key;
+        //     }
+        // }
 
-        if ($newStr != '') {
-            dd($newStr);
-        } else {
-            dd(-1);
-        }
+        // if ($newStr != '') {
+        //     dd($newStr);
+        // } else {
+        //     dd(-1);
+        // }
 
         $categories = $this->categoryRepository->paginate([], [], [], 10);
         return view('admin.category.index', compact('categories'));
