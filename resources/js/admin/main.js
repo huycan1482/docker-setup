@@ -1,5 +1,4 @@
-    
-   export const Common = {
+    export const Common = {
         config: {
             busy: false,
             sending: false,

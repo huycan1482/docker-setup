@@ -34,6 +34,10 @@
                         </div>
                     </div>
                 </div>
+
+                @foreach($allFiles as $image)
+                    <img src="{{ $image }}" alt>
+                @endforeach
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">

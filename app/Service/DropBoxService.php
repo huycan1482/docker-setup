@@ -116,4 +116,26 @@ class DropBoxService
 
         return $this->fail($method, $path, [], $response);
     }
+
+    public function getList($data) 
+    {
+        $path = '/2/file_requests/list_v2';
+        $method = 'GET';
+        $response = $this->client->request($method, $path, [
+            'verify' => false,
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('DROPBOX_TOKEN'),
+                'Content-Type' => 'application/octet-stream',
+                // 'Dropbox-API-Arg' => '{"path":"/'.$path.'", "mode":"add", "autorename": true, "mute": false}'
+                'json' => ['limit' => 1000]
+            ]
+        ]);
+
+        if ($response->getStatusCode() == 200 || $response->getStatusCode() == 201) {
+            return json_decode($response->getBody(), true);
+        }
+
+        return $this->fail($method, $path, $data, $response);
+    }
 }
